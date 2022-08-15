@@ -9,7 +9,7 @@ service.interceptors.request.use()
 service.interceptors.response.use(
   (response) => {
     const { success, message, data } = response.data
-    if (success) {
+    if (!success) {
       return data
     } else {
       Message.error(message)
