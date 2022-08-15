@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">name: {{ token }}</div>
     <div class="block">
       <span class="demonstration">页数较少时的效果</span>
       <el-pagination
@@ -25,7 +25,8 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'name'
+      'name',
+      'token'
     ])
   }
 }
