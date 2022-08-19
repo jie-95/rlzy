@@ -1,4 +1,4 @@
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, getUuserDetailById } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 export default {
@@ -33,8 +33,17 @@ export default {
     async getUserInfo({ commit }) {
       const res = await getUserInfo()
       console.log(res)
-      commit('setUserInfo', res)
+
+      // 获取用户图片
+      const baseInfo = await getUuserDetailById(res.userId)
+
+      const baseResult = { ...res, ...baseInfo }
+      commit('setUserInfo', baseResult)
       return res
+    },
+    logout({ commit }) {
+      commit('removeToken')
+      commit('removeUserInfo')
     }
   }
 }

@@ -19,4 +19,11 @@ export function getUserInfo() {
   })
 }
 
+export function getUuserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'get'
+  })
+}
+
 export function logout() {}

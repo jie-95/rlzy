@@ -15,10 +15,12 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// 自定义事件
+import * as directives from '@/directives'
+
+Object.keys(directives).forEach((ele) => {
+  Vue.directive(ele, directives[ele])
+})
 
 Vue.use(ElementUI)
 
@@ -28,5 +30,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 })
