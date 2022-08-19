@@ -1,20 +1,6 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ token }}</div>
-    <div class="block">
-      <span class="demonstration">页数较少时的效果</span>
-      <el-pagination
-        layout="prev, pager, next"
-        :total="50"
-      />
-    </div>
-    <div class="block">
-      <span class="demonstration">大于 7 页时的效果</span>
-      <el-pagination
-        layout="prev, pager, next"
-        :total="1000"
-      />
-    </div>
   </div>
 </template>
 
@@ -24,10 +10,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   computed: {
-    ...mapGetters([
-      'name',
-      'token'
-    ])
+    ...mapGetters(['name', 'token'])
   }
 }
 </script>

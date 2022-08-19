@@ -57,6 +57,7 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
+import { Message } from 'element-ui'
 export default {
   name: 'Login',
   data() {
@@ -122,9 +123,11 @@ export default {
         await this.$refs.loginForm.validate()
         this.loading = true
         await this.$store.dispatch('user/login', this.loginForm)
+        Message.success('登陆成功')
         this.$router.push('/')
       } catch (error) {
         console.log(error)
+        Message.warning('登陆失败')
       } finally {
         this.loading = false
       }
