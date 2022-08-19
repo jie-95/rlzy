@@ -11,9 +11,12 @@ import store from '@/store' // 引入vuex store实例
 
 const whiteList = ['/login', '/404'] // 定义白名单  所有不受权限控制的页面
 // 路由的前置守卫
-router.beforeEach(function(to, from, next) {
+router.beforeEach(async(to, from, next) => {
   //  首先判断有无token
   if (store.getters.token) {
+    if (!store.getters.userId) {
+      await store.dispatch('user/getUserInfo')
+    }
     //   如果有token 继续判断是不是去登录页
     if (to.path === '/login') {
       //  表示去的是登录页
