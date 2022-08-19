@@ -17,9 +17,11 @@ import '@/permission' // permission control
 
 // 自定义事件
 import * as directives from '@/directives'
-
-Object.keys(directives).forEach((ele) => {
-  Vue.directive(ele, directives[ele])
+// 注册自定义指令
+// 遍历所有的导出的指令对象 完成自定义全局注册
+Object.keys(directives).forEach((key) => {
+  // 注册自定义指令
+  Vue.directive(key, directives[key])
 })
 
 Vue.use(ElementUI)
