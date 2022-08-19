@@ -8,4 +8,15 @@ export function login(data) {
   })
 }
 
+/**
+ * 获取用户信息
+ * @returns
+ */
+export function getUserInfo() {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
+}
+
 export function logout() {}
