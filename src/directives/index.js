@@ -13,3 +13,9 @@ export const imgerror = {
     }
   }
 }
+
+export const color = {
+  inserted(dom, options) {
+    dom.style.color = options.value
+  }
+}

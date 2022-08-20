@@ -4,7 +4,6 @@ import { Message } from 'element-ui'
 import router from '@/router'
 
 const timeout = 3600
-
 function isCheckOut() {
   return (Date.now() - store.getters.HrsaasTime) / 1000 > timeout
 }
@@ -44,6 +43,11 @@ service.interceptors.response.use(
     }
   },
   (err) => {
+    if (err.response && err.response.data && err.response.data.code === 10002) {
+      store.dispatch('user/logout')
+      router.push('/login')
+    }
+    Message.error(err.message || '')
     return Promise.reject(err)
   }
 )
