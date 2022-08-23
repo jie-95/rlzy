@@ -56,14 +56,18 @@
     <el-row slot="footer" type="flex" justify="center">
       <!-- 列被分为24 -->
       <el-col :span="6">
-        <el-button type="primary" size="small">确定</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="submitDept"
+        >确定</el-button>
         <el-button size="small" @click="handleClose">取消</el-button>
       </el-col>
     </el-row>
   </el-dialog>
 </template>
 <script>
-import { getDepartments } from '@/api/departments'
+import { getDepartments, addDepartments } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   props: {
@@ -154,6 +158,19 @@ export default {
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple()
       console.log(this.peoples)
+    },
+    async submitDept() {
+      this.$refs.deptForm.validate(async(vali) => {
+        console.log(vali)
+        if (vali) {
+          // 表单校验通过
+          // 新增部门接口
+          await addDepartments({ ...this.formData, pid: this.treeNode.id })
+          this.$message.success('部门新增成功')
+          this.handleClose()
+          this.$emit('refreshDept')
+        }
+      })
     }
   }
 }
