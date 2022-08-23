@@ -5,7 +5,7 @@
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
         <!-- 缺少treeNode -->
-        <tree-tools :tree-node="company" class="title" />
+        <tree-tools :tree-node="company" class="title" :is-root="false" @addDepts="addDepts" />
         <!--放置一个属性   这里的props和我们之前学习的父传子 的props没关系-->
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
           <!-- 说明el-tree里面的这个内容 就是插槽内容 => 填坑内容  => 有多少个节点循环多少次 -->
@@ -18,7 +18,7 @@
             @addDepts="addDepts"
           />
         </el-tree>
-        <AddDept :dialog-visible="dialogVisible" />
+        <AddDept :dialog-visible.sync="dialogVisible" :tree-node="node" />
       </el-card>
     </div>
   </div>
@@ -39,7 +39,8 @@ export default {
       defaultProps: {
         label: 'name'
       },
-      dialogVisible: false // 显示窗体
+      dialogVisible: false, // 显示窗体,
+      node: {}
     }
   },
   created() {

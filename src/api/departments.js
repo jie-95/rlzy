@@ -7,3 +7,4 @@ export function getDepartments() {
     url: '/company/department'
   })
 }
+
