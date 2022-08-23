@@ -21,9 +21,12 @@
             :tree-node="obj.data"
             @delDepts="getDepartments"
             @addDepts="addDepts"
+            @editDepts="editDepts"
+            @refreshDept="getDepartments"
           />
         </el-tree>
         <AddDept
+          ref="addDepts"
           :dialog-visible.sync="dialogVisible"
           :tree-node="node"
           @refreshDept="getDepartments"
@@ -66,6 +69,12 @@ export default {
       this.dialogVisible = true // 显示弹层
       // 因为node是当前的点击的部门， 此时这个部门应该记录下来,
       this.node = node
+    },
+    editDepts(node) {
+      this.node = node
+      this.dialogVisible = true
+      console.log(node)
+      this.$refs.addDepts.formData = { ...node }
     }
   }
 }

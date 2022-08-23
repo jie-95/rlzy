@@ -25,10 +25,11 @@
             <!-- 具名插槽 -->
             <el-dropdown-menu slot="dropdown">
               <!-- 下拉选项 -->
+              <el-dropdown-item command="add">添加子部门</el-dropdown-item>
               <el-dropdown-item
-                command="add"
-              >添加子部门</el-dropdown-item>
-              <el-dropdown-item v-if="isRoot">编辑部门</el-dropdown-item>
+                v-if="isRoot"
+                command="edit"
+              >编辑部门</el-dropdown-item>
               <el-dropdown-item v-if="isRoot">删除部门</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+import { delDepartments } from '@/api/departments'
 export default {
   props: {
     //   定义一个props属性
@@ -59,8 +61,16 @@ export default {
         this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         // 编辑
+        this.$emit('editDepts', this.treeNode)
       } else {
         // 删除
+        this.$confirm('确认删除该部门吗？', '提示', { type: 'warming' }).then(
+          async(res) => {
+            await delDepartments(this.treeNode.id)
+            this.$emit('refreshDept')
+            this.$message.success('删除成功')
+          }
+        )
       }
     }
   }
