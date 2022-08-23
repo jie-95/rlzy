@@ -18,6 +18,7 @@
           <!-- 顺序一定是 执行slot-scope的赋值 才去执行 props的传值 -->
           <tree-tools
             slot-scope="obj"
+            :loading="loading"
             :tree-node="obj.data"
             @delDepts="getDepartments"
             @addDepts="addDepts"
@@ -52,7 +53,8 @@ export default {
         label: 'name'
       },
       dialogVisible: false, // 显示窗体,
-      node: {}
+      node: {},
+      loading: false
     }
   },
   created() {
@@ -60,10 +62,20 @@ export default {
   },
   methods: {
     async getDepartments() {
-      const result = await getDepartments()
-      this.company = { name: result.companyName, manager: result.companyManage }
-      this.departs = tranListToTreeData(result.depts, '') // 需要将其转化成树形结构
-      console.log(result)
+      this.loading = true
+      try {
+        const result = await getDepartments()
+        this.company = {
+          name: result.companyName,
+          manager: result.companyManage
+        }
+        this.departs = tranListToTreeData(result.depts, '')
+        this.loading = false
+        // 需要将其转化成树形结构
+        // console.log(result)
+      } catch (error) {
+        console.log(error)
+      }
     },
     addDepts(node) {
       this.dialogVisible = true // 显示弹层
@@ -73,7 +85,7 @@ export default {
     editDepts(node) {
       this.node = node
       this.dialogVisible = true
-      console.log(node)
+      // console.log(node)
       this.$refs.addDepts.formData = { ...node }
     }
   }

@@ -31,13 +31,13 @@ export default {
     // 通过接口获取token
     async login({ commit }, data) {
       const res = await login(data)
-      console.log(res)
+      // console.log(res)
       commit('setHrsaasTime', +new Date())
       commit('setToken', res)
     },
     async getUserInfo({ commit }) {
       const res = await getUserInfo()
-      console.log(res)
+      // console.log(res)
 
       // 获取用户图片
       const baseInfo = await getUuserDetailById(res.userId)

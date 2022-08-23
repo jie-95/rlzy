@@ -1,7 +1,7 @@
 <template>
   <!-- 新增部门的弹层 -->
   <el-dialog
-    title="新增部门"
+    :title="showTitle"
     :visible.sync="dialogVisible"
     :before-close="handleClose"
   >
@@ -67,7 +67,11 @@
   </el-dialog>
 </template>
 <script>
-import { getDepartments, addDepartments } from '@/api/departments'
+import {
+  getDepartments,
+  addDepartments,
+  updateDepartments
+} from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
   props: {
@@ -83,18 +87,38 @@ export default {
   data() {
     const checkCodeRepeat = async(rule, value, callback) => {
       const { depts } = await getDepartments()
-      console.log(depts)
-      console.log(value)
-      const isRepeat = depts.some((ele) => ele.code === value)
-      console.log(isRepeat)
+      let isRepeat = false
+      if (this.formData.id) {
+        // 编辑情况
+        // const list = depts.filter((ele) => ele.id !== this.treeNode.id)
+        isRepeat = depts.some(
+          (ele) => ele.id !== this.treeNode.id && ele.code === value
+        )
+      } else {
+        isRepeat = depts.some((ele) => ele.code === value)
+      }
+      // console.log(depts)
+      // console.log(value)
+      // const isRepeat = depts.some((ele) => ele.code === value)
+      // console.log(isRepeat)
       isRepeat ? callback(new Error(`部门编码${value}已存在`)) : callback()
     }
     const checkNameRepeat = async(rule, value, callback) => {
-      console.log(this.treeNode.id)
+      // console.log(this.treeNode.id)
       const { depts } = await getDepartments()
-      const list = depts.filter((ele) => this.treeNode.id === ele.pid)
-      console.log(list)
-      const isRepeat = list.some((ele) => ele.name === value)
+      // const list = depts.filter((ele) => this.treeNode.id === ele.pid)
+      // // console.log(list)
+      // const isRepeat = list.some((ele) => ele.name === value)
+      let isRepeat = false
+      if (this.formData.id) {
+        const list = depts.filter(
+          (ele) => this.treeNode.id !== ele.pid && this.treeNode.pid === ele.pid
+        )
+        isRepeat = list.some((ele) => ele.name === value)
+      } else {
+        const list = depts.filter((ele) => this.treeNode.id === ele.pid)
+        isRepeat = list.some((ele) => ele.name === value)
+      }
       isRepeat
         ? callback(new Error(`部门名称在同级部门${value}已存在`))
         : callback()
@@ -143,9 +167,13 @@ export default {
       peoples: []
     }
   },
+  computed: {
+    showTitle() {
+      return this.formData.id ? '编辑部门' : '新增部门'
+    }
+  },
   methods: {
     handleClose() {
-      console.log(123)
       this.$refs.deptForm.resetFields()
       this.formData = {
         name: '', // 部门名称
@@ -157,16 +185,21 @@ export default {
     },
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple()
-      console.log(this.peoples)
+      // console.log(this.peoples)
     },
     async submitDept() {
       this.$refs.deptForm.validate(async(vali) => {
-        console.log(vali)
+        // console.log(vali)
         if (vali) {
           // 表单校验通过
           // 新增部门接口
-          await addDepartments({ ...this.formData, pid: this.treeNode.id })
-          this.$message.success('部门新增成功')
+          if (this.formData.id) {
+            await updateDepartments(this.formData)
+            this.$message.success('部门修改成功')
+          } else {
+            await addDepartments({ ...this.formData, pid: this.treeNode.id })
+            this.$message.success('部门新增成功')
+          }
           this.handleClose()
           this.$emit('refreshDept')
         }

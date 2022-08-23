@@ -14,9 +14,9 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
-    console.log(config)
+    // console.log(config)
     if (store.getters.token) {
-      console.log('======', isCheckOut())
+      // console.log('======', isCheckOut())
       if (isCheckOut()) {
         store.dispatch('user/logout')
         router.push('/login')

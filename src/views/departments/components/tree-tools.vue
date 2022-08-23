@@ -54,6 +54,7 @@ export default {
       default: true // 默认显示
     }
   },
+
   methods: {
     handleCommand(type) {
       if (type === 'add') {
