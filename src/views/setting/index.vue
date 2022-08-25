@@ -124,7 +124,7 @@ export default {
         const { rows, total } = await getRoleList(this.page)
         this.list = rows
         this.total = total
-        console.log(this.list)
+        // console.log(this.list)
       } catch (e) {
         console.log(e)
       } finally {
@@ -132,7 +132,7 @@ export default {
       }
     },
     changePage(val) {
-      console.log(this.page.page)
+      // console.log(this.page.page)
       this.getRoleList()
     },
     changeSize() {
@@ -143,12 +143,12 @@ export default {
       this.dialogVisible = true
     },
     edit(row) {
-      console.log(row)
+      // console.log(row)
       this.dialogVisible = true
       this.$refs.roleDialog.roleForm = { ...row }
     },
     async del(id) {
-      console.log(id)
+      // console.log(id)
       // this.$alert('这是一段内容', '标题名称', {
       //   confirmButtonText: '确定',
       //   callback: (action) => {
@@ -163,7 +163,7 @@ export default {
         await deleteRole(id)
         this.$message.success('角色删除成功')
         this.page.page = 1
-        console.log('=========')
+        // console.log('=========')
         this.getRoleList()
       } catch (error) {
         console.log(error)

@@ -31,7 +31,7 @@ export default {
     // 通过接口获取token
     async login({ commit }, data) {
       const res = await login(data)
-      console.log(res)
+      // console.log(res)
       commit('setHrsaasTime', +new Date())
       commit('setToken', res)
     },
