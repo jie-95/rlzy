@@ -53,6 +53,15 @@
           v-model="formData.departmentName"
           style="width: 80%"
           placeholder="请选择部门"
+          @focus="getDepartments"
+        />
+        <el-tree
+          v-if="ShowTree"
+          v-loading="loading"
+          :data="treeData"
+          :props="defaultProps"
+          :default-expand-all="true"
+          @node-click="handleNodeClick"
         />
       </el-form-item>
       <el-form-item label="转正时间" prop="correctionTime">
@@ -77,6 +86,8 @@
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
+import { getDepartments } from '@/api/departments'
+import { tranListToTreeData } from '@/utils'
 export default {
   props: {
     visibelDialog: {
@@ -121,17 +132,33 @@ export default {
         ],
         workNumber: [{ required: true, message: '工号必填', trigger: 'blur' }],
         departmentName: [
-          { required: true, message: '部门必填', trigger: 'blur' }
+          { required: true, message: '部门必填', trigger: 'change' }
         ],
         timeOfEntry: [
           { required: true, message: '入职时间必填', trigger: 'blur' }
         ]
-      }
+      },
+      treeData: [],
+      defaultProps: {
+        label: 'name'
+      },
+      ShowTree: false
     }
   },
   methods: {
     handleClose() {
       this.$emit('update:visibelDialog', false)
+    },
+    async getDepartments() {
+      this.ShowTree = true
+      this.loading = true
+      const { depts } = await getDepartments()
+      this.treeData = tranListToTreeData(depts, '')
+      this.loading = false
+    },
+    handleNodeClick(node) {
+      this.formData.departmentName = node.name
+      this.ShowTree = false
     }
   }
 }
