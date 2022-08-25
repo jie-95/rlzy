@@ -37,7 +37,7 @@ export default {
     },
     async getUserInfo({ commit }) {
       const res = await getUserInfo()
-      console.log(res)
+      // console.log(res)
 
       // 获取用户图片
       const baseInfo = await getUuserDetailById(res.userId)
