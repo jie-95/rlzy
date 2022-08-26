@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">dashboard: {{ name }}</div>
+    <UploadExcel />
   </div>
 </template>
 
@@ -30,11 +31,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+    ...mapGetters(['name'])
   }
-
 }
 </script>
 

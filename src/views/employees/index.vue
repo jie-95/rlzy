@@ -6,7 +6,7 @@
       新语法：v-slot:插槽名
        -->
       <!-- <template v-slot:before>共166条记录</template> -->
-      <span slot="before">共166条记录</span>
+      <span slot="before">共{{ total }}条记录</span>
       <template slot="after">
         <el-button size="small" type="warning">导入</el-button>
         <el-button size="small" type="danger">导出</el-button>
@@ -19,7 +19,7 @@
     </PageTools>
     <!-- 放置表格和分页 -->
     <el-card>
-      <el-table border :data="list">
+      <el-table v-loading="loading" border :data="list">
         <el-table-column label="序号" type="index" sortable="" width="80" />
         <!-- <el-table-column property="name" label="姓名" width="120" /> -->
         <el-table-column prop="username" label="姓名" />
@@ -41,28 +41,45 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="280">
-          <template>
+          <template slot-scope="{ row }">
             <el-button type="text" size="small">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
             <el-button type="text" size="small">角色</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="del(row.id)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页组件 -->
       <el-row type="flex" justify="end" align="middle" style="height: 60px">
-        <el-pagination background="" layout="prev, pager, next" />
+        <el-pagination
+          v-if="total > 0"
+          background
+          layout="total, prev, pager, next, sizes"
+          :current-page.sync="page.page"
+          :page-size.sync="page.size"
+          :page-sizes="[5, 10, 15, 20]"
+          :total="total"
+          @current-change="getEmployeeList"
+          @size-change="getEmployeeList"
+        />
       </el-row>
     </el-card>
-    <addEmployee :visibel-dialog.sync="visibelDialog" />
-    <!-- .sync   :visibelDialog="visibelDialog" 和 update:visibelDialog -->
+    <addEmployee
+      :visibel-dialog.sync="visibelDialog"
+      @refresh="getEmployeeList"
+    />
+    <!-- .sync 会解析成  :visibelDialog="visibelDialog" 和 update:visibelDialog -->
   </div>
 </template>
 
 <script>
-import { getEmployeeList } from '@/api/employees'
+import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-emplyee.vue'
 export default {
@@ -80,6 +97,7 @@ export default {
         page: 1,
         size: 10
       },
+      total: 0,
       visibelDialog: false
     }
   },
@@ -92,9 +110,13 @@ export default {
     async getEmployeeList() {
       this.loading = true
       try {
-        const { rows } = await getEmployeeList()
-        console.log(rows)
+        const { rows, total } = await getEmployeeList(this.page)
+        this.total = total
         this.list = rows
+        if (total !== 0 && rows.length === 0) {
+          this.page.page = this.page.page - 1
+          this.getEmployeeList()
+        }
       } catch (error) {
         console.log(error)
       } finally {
@@ -123,6 +145,16 @@ export default {
     // 添加员工
     addEmplyee() {
       this.visibelDialog = true
+    },
+    // 删除员工
+    async del(id) {
+      await this.$confirm('确认删除此员工吗？', '提示', { type: 'warming' })
+      try {
+        await delEmployee(id)
+        this.getEmployeeList()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
