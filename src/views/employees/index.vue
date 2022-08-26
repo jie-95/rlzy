@@ -8,7 +8,11 @@
       <!-- <template v-slot:before>共166条记录</template> -->
       <span slot="before">共{{ total }}条记录</span>
       <template slot="after">
-        <el-button size="small" type="warning">导入</el-button>
+        <el-button
+          size="small"
+          type="warning"
+          @click="$router.push('/import?type=user')"
+        >导入</el-button>
         <el-button size="small" type="danger">导出</el-button>
         <el-button
           size="small"
@@ -111,6 +115,7 @@ export default {
       this.loading = true
       try {
         const { rows, total } = await getEmployeeList(this.page)
+
         this.total = total
         this.list = rows
         if (total !== 0 && rows.length === 0) {

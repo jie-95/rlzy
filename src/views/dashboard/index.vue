@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">dashboard: {{ name }}</div>
-    <UploadExcel />
   </div>
 </template>
 
@@ -11,7 +10,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   // direactives 局部注册自定义指令
-  // directives: {
+  // directives: {S
   //   // key: value
   //   // key 自定义指令的名称
   //   // value ==》 自定义指令对应的逻辑
@@ -32,7 +31,8 @@ export default {
   },
   computed: {
     ...mapGetters(['name'])
-  }
+  },
+  methods: {}
 }
 </script>
 
