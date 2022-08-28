@@ -13,7 +13,11 @@
           type="warning"
           @click="$router.push('/import?type=user')"
         >导入</el-button>
-        <el-button size="small" type="danger">导出</el-button>
+        <el-button
+          size="small"
+          type="danger"
+          @click="exportData"
+        >导出</el-button>
         <el-button
           size="small"
           type="primary"
@@ -86,6 +90,7 @@
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-emplyee.vue'
+import { formatDate } from '@/filters'
 export default {
   name: 'Hrsaas1Index',
   components: {
@@ -160,6 +165,82 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 导出exceL
+    async exportData() {
+      const { rows } = await getEmployeeList({
+        page: 1,
+        size: this.total
+      })
+      console.log(rows)
+      const headers = {
+        姓名: 'username',
+        手机号: 'mobile',
+        入职日期: 'timeOfEntry',
+        聘用形式: 'formOfEmployment',
+        转正日期: 'correctionTime',
+        工号: 'workNumber',
+        部门: 'departmentName'
+      }
+      // console.log(this.fromJson(headers, rows))
+      // 导出exceL文件/
+      import('@/vendor/Export2Excel').then((excel) => {
+        excel.export_json_to_excel({
+          header: Object.keys(headers), // 表头 必填
+          data: this.fromJson(headers, rows), // 具体数据 必填
+          filename: 'excel-list', // 非必填
+          autoWidth: true, // 非必填
+          bookType: 'xlsx', // 非必填
+          multiHeader: [['姓名', '主要信息', '', '', '', '', '']],
+          merges: ['A1:A2', 'B1:G1']
+        })
+      })
+      //
+      //
+      //
+      // 1.
+      // rows.map((ele) => {
+      //   const arr = []
+      //   Object.keys(headers).forEach((key) => {
+      //     arr.push(ele[headers[key]])
+      //   })
+      //   console.log(arr)
+      // })
+      //
+      //
+      // 2.
+      // const arr = rows.map((ele) => {
+      //   return Object.keys(headers).map((key) => {
+      //     return ele[headers[key]]
+      //   })
+      // })
+      // console.log(arr)
+      //
+      //
+      // 3.
+      // const arr = rows.map((ele) => {
+      //   console.log(ele)
+      //   return Object.values(headers).map((key) => {
+      //     return ele[key]
+      //   })
+      // })
+      // console.log(arr)
+    },
+    // 4.
+    fromJson(headers, rows) {
+      return rows.map((ele) => {
+        return Object.values(headers).map((key) => {
+          if (key === 'timeOfEntry' || key === 'correctionTime') {
+            return formatDate(ele[key])
+          } else if (key === 'formOfEmployment') {
+            const obj = EmployeeEnum.hireType.find((element) => {
+              element.id === +ele[key]
+            })
+            return obj?.value || '非正式'
+          }
+          return ele[key]
+        })
+      })
     }
   }
 }

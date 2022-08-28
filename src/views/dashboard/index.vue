@@ -1,6 +1,10 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">dashboard: {{ name }}</div>
+    <a
+      href="http://localhost:6868/static/img/login-logo.758b34e9.png"
+      download="login-logo.758b34e9.png"
+    >点击</a>
   </div>
 </template>
 
