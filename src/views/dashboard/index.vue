@@ -1,6 +1,10 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">dashboard: {{ name }}</div>
+    <a
+      href="http://localhost:6868/static/img/login-logo.758b34e9.png"
+      download="login-logo.758b34e9.png"
+    >点击</a>
   </div>
 </template>
 
@@ -10,7 +14,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   // direactives 局部注册自定义指令
-  // directives: {
+  // directives: {S
   //   // key: value
   //   // key 自定义指令的名称
   //   // value ==》 自定义指令对应的逻辑
@@ -30,11 +34,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
-
+    ...mapGetters(['name'])
+  },
+  methods: {}
 }
 </script>
 
