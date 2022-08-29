@@ -16,8 +16,6 @@ export function getEmployeeList(params) {
   return request({
     url: '/sys/user',
     params
-<<<<<<< HEAD
-=======
   })
 }
 
@@ -117,6 +115,5 @@ export function updateJob(data) {
     url: `/employees/${data.userId}/jobs`,
     method: 'put',
     data
->>>>>>> feature/employees
   })
 }
