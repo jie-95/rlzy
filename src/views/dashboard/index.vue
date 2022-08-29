@@ -5,11 +5,13 @@
       href="http://localhost:6868/static/img/login-logo.758b34e9.png"
       download="login-logo.758b34e9.png"
     >点击</a>
+    <UploadImg @onSuccess="handelSuccess" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import UploadImg from '@/components/ImageUpload'
 
 export default {
   name: 'Dashboard',
@@ -28,6 +30,9 @@ export default {
   //     }
   //   }
   // },
+  components: {
+    UploadImg
+  },
   data() {
     return {
       info: {}
@@ -36,7 +41,16 @@ export default {
   computed: {
     ...mapGetters(['name'])
   },
-  methods: {}
+  methods: {
+    // 自定义图片上传规则
+    // beforeUploadCheck() {
+    // this.$message.error('asdaa')
+    // return true
+    // },
+    handelSuccess({ url }) {
+      console.log(url)
+    }
+  }
 }
 </script>
 

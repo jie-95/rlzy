@@ -1,6 +1,13 @@
 <template>
   <div class="user-info">
     <!-- 个人信息 -->
+    <el-row type="flex" justify="end">
+      <el-tooltip content="打印个人基本信息">
+        <router-link :to="`/employees/print/${userId}?type=personal`">
+          <i class="el-icon-printer" />
+        </router-link>
+      </el-tooltip>
+    </el-row>
     <el-form label-width="220px">
       <!-- 工号 入职时间 -->
       <el-row class="inline-info">
@@ -58,6 +65,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <UploadImg ref="employeeHeader" @onSuccess="headerSuccess" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,6 +98,7 @@
         <!-- 员工照片 -->
 
         <el-form-item label="员工照片">
+          <UploadImg ref="employeePic" @onSuccess="PicSuccess" />
           <!-- 放置上传图片 -->
         </el-form-item>
         <el-form-item label="国家/地区">
@@ -388,14 +397,18 @@
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
+import UploadImg from '@/components/ImageUpload'
 
 import {
   getPersonalDetail,
   updatePersonal,
   saveUserDetailById
 } from '@/api/employees'
-
+// import UploadImg from '@/components/ImageUpload'
 export default {
+  components: {
+    UploadImg
+  },
   data() {
     return {
       userId: this.$route.params.id,
@@ -472,6 +485,7 @@ export default {
   methods: {
     async getPersonalDetail() {
       this.formData = await getPersonalDetail(this.userId)
+      this.$refs.employeePic.fileList = [{ url: this.formData.staffPhoto }]
     },
     async savePersonal() {
       await updatePersonal(this.formData)
@@ -479,7 +493,18 @@ export default {
     },
     async saveUser() {
       await saveUserDetailById(this.userInfo)
+      // console.log(this.userInfo)
       this.$message.success('更新成功')
+    },
+    setImgUrl(staffPhoto) {
+      // console.log(staffPhoto)
+      this.$refs.employeeHeader.fileList = [{ url: staffPhoto }]
+    },
+    headerSuccess({ url }) {
+      this.userInfo.staffPhoto = url
+    },
+    PicSuccess({ url }) {
+      this.formData.staffPhoto = url
     }
   }
 }
