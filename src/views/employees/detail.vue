@@ -74,6 +74,7 @@ export default {
     async getUserDetailById() {
       this.userInfo = await getUserDetailById(this.getId)
       this.$refs.userInfoRef.userInfo = { ...this.userInfo }
+      this.$refs.userInfoRef.setImgUrl(this.userInfo.staffPhoto)
     },
     async upDateInfo() {
       this.loading = true
