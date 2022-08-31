@@ -102,7 +102,7 @@ export default {
       this.dialogVisible = true
     },
     edit(row) {
-      this.$refs.addPermission.formData = row
+      this.$refs.addPermission.formData = { ...row }
       this.dialogVisible = true
     }
   }
