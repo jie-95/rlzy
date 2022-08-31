@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between" align="middle">
         <el-col>
           <!-- 前半部分 -->
-          <div :class="`before ${type}`">
+          <div v-if="showBefor" :class="`before ${type}`">
             <i :class="`el-icon-${type}`" />
             <slot name="before" />
           </div>
@@ -32,6 +32,10 @@ export default {
           return true
         } else return false
       }
+    },
+    showBefor: {
+      type: Boolean,
+      default: true
     }
   }
 }
