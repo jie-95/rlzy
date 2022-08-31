@@ -77,7 +77,11 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="asRole(row.id)"
+            >角色</el-button>
             <el-button
               type="text"
               size="small"
@@ -105,6 +109,11 @@
       :visibel-dialog.sync="visibelDialog"
       @refresh="getEmployeeList"
     />
+    <assignRole
+      ref="assignRole"
+      v-model="assignRoleVisible"
+      :user-id="currentUserId"
+    />
     <!-- .sync 会解析成  :visibelDialog="visibelDialog" 和 update:visibelDialog -->
     <!-- 打印二维码 -->
     <el-dialog title="二维码" :visible.sync="showCodeDialog">
@@ -120,11 +129,13 @@ import QrCode from 'qrcode'
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-emplyee.vue'
+import assignRole from './components/assign-role.vue'
 import { formatDate } from '@/filters'
 export default {
   name: 'Hrsaas1Index',
   components: {
-    addEmployee
+    addEmployee,
+    assignRole
   },
 
   data() {
@@ -138,7 +149,9 @@ export default {
       },
       total: 0,
       visibelDialog: false,
-      showCodeDialog: false
+      showCodeDialog: false,
+      assignRoleVisible: false,
+      currentUserId: ''
     }
   },
 
@@ -286,6 +299,11 @@ export default {
         QrCode.toCanvas(this.$refs.myCanvas, url) // 将地址转化成二维码
         // 如果转化的二维码后面信息 是一个地址的话 就会跳转到该地址 如果不是地址就会显示内容
       })
+    },
+    async asRole(id) {
+      this.currentUserId = id
+      await this.$refs.assignRole.getRoleList()
+      this.assignRoleVisible = true
     }
   }
 }
