@@ -18,7 +18,11 @@
           <el-table-column prop="description" label="描述" />
           <el-table-column label="操作" width="320">
             <template slot-scope="scope">
-              <el-button size="small" type="success">分配权限</el-button>
+              <el-button
+                size="small"
+                type="success"
+                @click="managerPermission(scope.row.id)"
+              >分配权限</el-button>
               <el-button
                 size="small"
                 type="primary"
@@ -82,17 +86,23 @@
       :dialog-visible.sync="dialogVisible"
       @refresh="getRoleList"
     />
+    <managerPermission
+      ref="permission"
+      :dialog-visible.sync="PermissionDialogVisible"
+    />
   </div>
 </template>
 
 <script>
 import RoleDialog from './components/roleDialog.vue'
+import managerPermission from './components/managerPermission.vue'
 import { getRoleList, deleteRole, getCompanyInfo } from '@/api/settings'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Hrsaas1Index',
   components: {
-    RoleDialog
+    RoleDialog,
+    managerPermission
   },
 
   data() {
@@ -106,7 +116,8 @@ export default {
       total: 0,
       loading: false,
       dialogVisible: false,
-      formData: {}
+      formData: {},
+      PermissionDialogVisible: false
     }
   },
   computed: {
@@ -171,6 +182,10 @@ export default {
     },
     async getCompanyInfo() {
       this.formData = await getCompanyInfo(this.companyId)
+    },
+    managerPermission(id) {
+      this.PermissionDialogVisible = true
+      this.$refs.permission.getPermissionList(id)
     }
   }
 }

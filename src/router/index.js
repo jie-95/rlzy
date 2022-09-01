@@ -9,7 +9,7 @@ import permission from './modules/permission'
 import salarys from './modules/salarys'
 import setting from './modules/setting'
 import social from './modules/social'
-const asyncRouter = [
+export const asyncRouter = [
   approvals,
   attendances,
   employees,
@@ -49,6 +49,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
 export const constantRoutes = [
   {
     path: '/login',
@@ -86,17 +87,17 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
-  },
+  }
   // ...asyncRouter,
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: [...constantRoutes, ...asyncRouter]
+    routes: [...constantRoutes]
   })
 
 const router = createRouter()
