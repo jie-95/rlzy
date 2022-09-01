@@ -18,7 +18,11 @@
           <el-table-column prop="description" label="描述" />
           <el-table-column label="操作" width="320">
             <template slot-scope="scope">
-              <el-button size="small" type="success">分配权限</el-button>
+              <el-button
+                size="small"
+                type="success"
+                @click="assign(scope.row.id)"
+              >分配权限</el-button>
               <el-button
                 size="small"
                 type="primary"

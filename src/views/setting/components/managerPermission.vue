@@ -4,42 +4,6 @@
     :visible.sync="dialogVisible"
     :before-close="handleClose"
   >
-    <!--
-show-checkbox        节点是否可被选择 checkbox 出现
-default-expand-all   默认展开
-props                配置选项
-default-checked-keys 默认选中的节点
-check-strictly       父子不联动
-
-如果需要通过 key 来获取或设置，则必须设置node-key。
-
-准备好假数据
-permData: [
-  {
-    code: 'employees',
-    description: '用户管理菜单',
-    enVisible: '1',
-    id: '604f7df5f900be1850edb152',
-    name: '员工管理',
-    pid: '0',
-    type: 1,
-    children: [
-        {
-        code: '214234',
-        description: '412214',
-        enVisible: '0',
-        id: '62f0d56637ecc10a881557f5',
-        name: '智商250',
-        pid: '604f7df5f900be1850edb152',
-        type: 2
-        }
-    ]
-  }
-],
-defaultProps: {
- label: 'name'
-},
--->
     <el-tree
       ref="permTree"
       :data="permData"
@@ -52,7 +16,7 @@ defaultProps: {
     />
     <el-row slot="footer" type="flex" justify="center">
       <el-col :span="6">
-        <el-button type="primary" size="small">确定</el-button>
+        <el-button type="primary" size="small" @click="btnOk">确定</el-button>
         <el-button size="small" @click="handleClose">取消</el-button>
       </el-col>
     </el-row>
@@ -60,7 +24,9 @@ defaultProps: {
 </template>
 
 <script>
-// import assign from '@/api/settings'
+import { getPermissionList } from '@/api/permisson'
+import { tranListToTreeData } from '@/utils'
+import { getRoleDetail, assignPerm } from '@/api/setting'
 export default {
   name: 'HrsaasManagerPermission',
   props: {
@@ -71,36 +37,43 @@ export default {
   },
   data() {
     return {
-      permData: [
-        {
-          code: 'employees',
-          description: '用户管理菜单',
-          enVisible: '1',
-          id: '604f7df5f900be1850edb152',
-          name: '员工管理',
-          pid: '0',
-          type: 1,
-          children: [
-            {
-              code: '214234',
-              description: '412214',
-              enVisible: '0',
-              id: '62f0d56637ecc10a881557f5',
-              name: '智商250',
-              pid: '604f7df5f900be1850edb152',
-              type: 2
-            }
-          ]
-        }
-      ],
+      permData: [],
       defaultProps: {
         label: 'name'
-      }
+      },
+      selectCheck: [],
+      loading: false
     }
   },
   methods: {
     handleClose() {
       this.$emit('update:dialogVisible', false)
+    },
+    async getPermissionList() {
+      try {
+        const res = await getPermissionList()
+        this.permData = tranListToTreeData(res, '0')
+        const { permIds } = await getRoleDetail(this.$attrs['role-id'])
+        this.selectCheck = permIds
+        console.log('this.selectCheck', this.selectCheck)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async btnOk() {
+      try {
+        this.loading = true
+        await assignPerm({
+          permIds: this.$refs.permTree.getCheckedKeys(),
+          id: this.$attrs['role-id']
+        })
+        this.$message.success('角色分配成功')
+        this.handleClose()
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
     }
   }
 }
