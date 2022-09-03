@@ -25,7 +25,7 @@
     </el-row>
 
     <el-calendar v-model="currentDate">
-      <template slot="dateCell" slot-scope="{ date, data }">
+      <template slot="dateCell" slot-scope="{ date }">
         <div class="date-content">
           <span class="text">{{ date | getDay }}</span>
           <span v-if="isWeek(date)" class="rest">休</span>
