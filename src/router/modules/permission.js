@@ -1,14 +1,12 @@
 import Layout from '@/layout'
-
 export default {
   path: '/permission',
+  meta: { id: 'permissions' },
   component: Layout,
-  meta: { id: 'permission' },
-  children: [
-    {
-      path: '',
-      component: () => import('@/views/permission'),
-      meta: { title: '权限管理', icon: 'lock' }
-    }
-  ]
+  children: [{
+    path: '',
+    name: 'permission',
+    component: () => import('@/views/permission/index'),
+    meta: { title: '权限管理', icon: 'lock' }
+  }]
 }

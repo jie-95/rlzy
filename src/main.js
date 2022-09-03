@@ -39,6 +39,8 @@ import Print from 'vue-print-nb'
 Vue.use(Print)
 
 Vue.config.productionTip = false
+import myMixin from '@/mixin/checkPermission'
+Vue.mixin(myMixin)
 
 new Vue({
   el: '#app',
