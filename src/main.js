@@ -33,7 +33,7 @@ import * as filters from '@/filters'
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
-Vue.use(ElementUI)
+
 // 注册打印组件
 import Print from 'vue-print-nb'
 Vue.use(Print)
@@ -42,9 +42,16 @@ Vue.config.productionTip = false
 import myMixin from '@/mixin/checkPermission'
 Vue.mixin(myMixin)
 
+//  设置element为当前的语言
+import i18n from '@/Lang'
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
 new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: (h) => h(App)
 })

@@ -82,7 +82,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'dashboard',
-        name: 'Dashboard',
+        name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: 'Dashboard', icon: 'dashboard' }
       }
@@ -95,8 +95,14 @@ export const constantRoutes = [
 
 const createRouter = () =>
   new Router({
-    // mode: 'history', // require service support
-    scrollBehavior: () => ({ y: 0 }),
+    mode: 'history', // require service support
+    scrollBehavior: (to, from, savePosition) => {
+      if (to.path === '/dashboard') {
+        return { y: 100 }
+      }
+      return { y: 0 }
+    },
+    base: '/hr/', // 设置项目基础地址网址导航栏
     routes: [...constantRoutes]
   })
 

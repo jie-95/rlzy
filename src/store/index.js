@@ -6,6 +6,7 @@ import settings from './modules/settings'
 import user from './modules/user'
 import permission from './modules/permission'
 import createPersistedState from 'vuex-persistedstate'
+import tagsView from './modules/tagsView'
 
 Vue.use(Vuex)
 
@@ -14,18 +15,21 @@ const store = new Vuex.Store({
     app,
     settings,
     user,
-    permission
+    permission,
+    tagsView
   },
   getters,
-  plugins: [createPersistedState({
-    reducer(state) {
-      return {
-        user: {
-          HrsaasTime: state.user.HrsaasTime
+  plugins: [
+    createPersistedState({
+      reducer(state) {
+        return {
+          user: {
+            HrsaasTime: state.user.HrsaasTime
+          }
         }
       }
-    }
-  })]
+    })
+  ]
 })
 
 export default store

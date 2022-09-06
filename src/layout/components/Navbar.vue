@@ -10,9 +10,10 @@
       江苏传智播客教育科技股份有限公司
       <span class="breadBtn">体验版</span>
     </div>
-
     <!-- <breadcrumb class="breadcrumb-container" /> -->
     <div class="right-menu">
+      <Lang class="right-menu-item" />
+      <ScreenFull class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imgerror="defaultImg" :src="staffPhoto" class="user-avatar">
@@ -128,6 +129,7 @@ export default {
       font-size: 18px;
       color: #5a5e66;
       vertical-align: text-bottom;
+      margin-left: 10px;
 
       &.hover-effect {
         cursor: pointer;

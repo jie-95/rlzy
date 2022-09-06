@@ -1,6 +1,9 @@
 <template>
   <div class="dashboard-container">
     <!-- 头部内容 -->
+    <!-- 多语言功能测试 -->
+    <!-- <h1>{{ $t('hello') }}</h1>
+    <h1>{{ $t('route.menu') }}</h1> -->
     <el-card class="header-card">
       <div>
         <div class="fl headL">
